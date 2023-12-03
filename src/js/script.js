@@ -6,9 +6,14 @@ export default class ThreeModule  {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
 
+        const axesHelper = new THREE.AxesHelper(5);
         this.scene = new THREE.Scene();
+        this.scene.add(axesHelper);
+
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        //renderer.render(scene, camera);
+        this.camera.position.set(0, 2, 5);
+        
+
     }
 
     animate() {
