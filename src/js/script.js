@@ -1,25 +1,44 @@
 import * as THREE from 'three';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 
-export default class ThreeModule  {
-    constructor() {
-        this.renderer = new THREE.WebGLRenderer();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(this.renderer.domElement);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-        const axesHelper = new THREE.AxesHelper(5);
-        this.scene = new THREE.Scene();
-        this.scene.add(axesHelper);
+const axesHelper = new THREE.AxesHelper(5);
+const scene = new THREE.Scene();
+scene.add(axesHelper);
 
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        this.camera.position.set(0, 2, 5);
-        
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+camera.position.set(-10, 30, 30);
+    
+const boxGeometry = new THREE.BoxGeometry();
+const boxMeterial = new THREE.MeshBasicMaterial({color: 0x00FF00});
+const box = new THREE.Mesh(boxGeometry, boxMeterial);
+scene.add(box);
 
-    }
+const planeGeometry = new THREE.PlaneGeometry(30, 30);
+const planeMaterial = new THREE.MeshBasicMaterial({color: 0xFFFFFF, side: THREE.DoubleSide});
+const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+scene.add(plane);
 
-    animate() {
-        this.renderer.render(this.scene, this.camera);
-    }
+const sphereGeometry = new THREE.SphereGeometry(4, 50, 50);
+const sphereMaterial = new THREE.MeshBasicMaterial({color: 0x0000FF, wireframe: false})
+const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+sphere.position.x = -10;
+scene.add(sphere);
+
+const gridHelper = new THREE.GridHelper(30);
+gridHelper.rotation.x = -0.5 * Math.PI;
+scene.add(gridHelper);
+
+const orbit = new OrbitControls(camera, renderer.domElement);
+orbit.update();
+
+function animate() {
+    box.rotation.x += 0.01;
+    box.rotation.y += 0.01;
+    renderer.render(scene, camera);
 }
 
-const three_module = new ThreeModule();
-three_module.animate();
+renderer.setAnimationLoop(animate);
